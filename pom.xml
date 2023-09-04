@@ -4,16 +4,38 @@
 
   <groupId>gravit.test</groupId>
   <artifactId>task</artifactId>
-  <name>GravitTestTask</name>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <name>GravitTestTask</name>
+  <licenses>
+	<license>
+	  <name>Apache License, Version 2.0</name>
+	  <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	  <distribution>repo</distribution>
+	</license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Gerfesto</name>
+      <email>hameilleb@gmail.com</email>
+      <url>t.me/vsauko</url>
+    </developer>
+  </developers>
+  
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
       <plugin>
@@ -42,11 +64,6 @@
     </resources>
     <finalName>${project.name}-${project.version}</finalName>
   </build>
-  <packaging>jar</packaging>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
   <repositories>
     <repository>
