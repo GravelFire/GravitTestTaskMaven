@@ -26,8 +26,10 @@ public class followme implements CommandExecutor {
     }
     CooldownUtil.putCooldown(player.getName() + "_followme", GravitTestTask.getSettings().getFollowMeCooldown() * 1000L);
     List<String> playerList = new ArrayList<>();
-    Bukkit.getOnlinePlayers().stream().filter(pall -> player.getLocation().distanceSquared(pall.getLocation()) <= 50).forEach(pall -> playerList.add(pall.getName()));
-    playerList.remove(player.getName());
+    Bukkit.getOnlinePlayers().stream().filter(pall -> !pall.equals(player) && player.getLocation().distanceSquared(pall.getLocation()) <= 50).forEach(pall -> {
+      playerList.add(pall.getName());
+      pall.sendMessage(GravitTestTask.getSettings().getMessage("followme").replace("%playername%", player.getName()));
+    });
     if (playerList.size() == 0) {
       player.sendMessage(GravitTestTask.getSettings().getMessage("notenoughplayers"));
       return true;
