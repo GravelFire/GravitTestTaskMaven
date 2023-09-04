@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class followme implements CommandExecutor {
+public class FollowMeCommand implements CommandExecutor {
 
   @Override
   public boolean onCommand(CommandSender commandSender, Command command, String s,
@@ -25,9 +25,9 @@ public class followme implements CommandExecutor {
       return true;
     }
     CooldownUtil.putCooldown(player.getName() + "_followme", GravitTestTask.getSettings().getFollowMeCooldown() * 1000L);
-    List<String> playerList = new ArrayList<>();
+    List<Player> playerList = new ArrayList<>();
     Bukkit.getOnlinePlayers().stream().filter(pall -> !pall.equals(player) && player.getLocation().distanceSquared(pall.getLocation()) <= 50).forEach(pall -> {
-      playerList.add(pall.getName());
+      playerList.add(pall);
       pall.sendMessage(GravitTestTask.getSettings().getMessage("followme").replace("%playername%", player.getName()));
     });
     if (playerList.size() == 0) {

@@ -1,8 +1,8 @@
 package gravit.test.task;
 
-import gravit.test.task.commands.followme;
-import gravit.test.task.commands.getmyhead;
-import gravit.test.task.commands.swap;
+import gravit.test.task.commands.FollowMeCommand;
+import gravit.test.task.commands.GetMyHeadCommand;
+import gravit.test.task.commands.SwapCommand;
 import gravit.test.task.runnable.FollowMeRunnable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +23,9 @@ public class GravitTestTask extends JavaPlugin {
         saveDefaultConfig();
         settings = new Settings(getConfig());
         prefix = "§e" + GravitTestTask.getPlugin(GravitTestTask.class).getDescription().getName();
-        getCommand("followme").setExecutor(new followme());
-        getCommand("getmyhead").setExecutor(new getmyhead());
-        getCommand("swap").setExecutor(new swap());
+        getCommand("followme").setExecutor(new FollowMeCommand());
+        getCommand("getmyhead").setExecutor(new GetMyHeadCommand());
+        getCommand("swap").setExecutor(new SwapCommand());
     }
     public void onDisable() {
         followMeRunnables.forEach(BukkitRunnable::cancel);

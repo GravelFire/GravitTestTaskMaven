@@ -29,7 +29,7 @@ public class CommonUtil {
     player.getInventory().addItem(head);
   }
 
-  public void sendGlowing(Player leader, List<String> receivers) {
+  public void sendGlowing(Player leader, List<Player> receivers) {
     WrapperPlayServerEntityMetadata wrapper = new WrapperPlayServerEntityMetadata();
     WrappedDataWatcher watcher = WrappedDataWatcher.getEntityWatcher(leader);
     watcher.setObject(0, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x40);
@@ -37,7 +37,7 @@ public class CommonUtil {
     wrapper.setMetadata(watcher.getWatchableObjects());
     wrapper.setEntityID(leader.getEntityId());
 
-    receivers.forEach(name -> wrapper.sendPacket(Bukkit.getPlayer(name)));
+    receivers.forEach(wrapper::sendPacket);
   }
 
 }

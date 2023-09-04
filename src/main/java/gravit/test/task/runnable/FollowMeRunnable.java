@@ -2,8 +2,8 @@ package gravit.test.task.runnable;
 
 import gravit.test.task.GravitTestTask;
 import java.util.List;
+import java.util.ListIterator;
 import lombok.AllArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -12,48 +12,61 @@ import org.bukkit.scheduler.BukkitRunnable;
 @AllArgsConstructor
 public class FollowMeRunnable extends BukkitRunnable {
   private final Player leader;
-  private final List<String> playerList;
+  private final List<Player> playerList;
 
 
   public void run() {
     if (!leader.isOnline()) cancel();
     if (playerList.size() == 0) cancel();
     int count = 0;
-    for (String name: playerList) {
-      Player p = Bukkit.getPlayer(name);
-      if (p == null) {
-        playerList.remove(name);
-        continue;
-      }
-      if (!p.isOnline()) {
-        playerList.remove(name);
-        for (String effect : GravitTestTask.getSettings().getFollowMeeffectsList()) {
-          p.removePotionEffect(PotionEffectType.getByName(effect));
+    ListIterator<Player> playerListIterator = playerList.listIterator();
+    while (playerListIterator.hasNext()) {
+        Player follower = playerListIterator.next();
+        if (follower == null) {
+          playerListIterator.remove();
+          continue;
         }
-        continue;
-      }
-      if (!p.getWorld().getName().equalsIgnoreCase(leader.getWorld().getName())) {
-        p.teleport(leader);
-        continue;
-      }
-      double distance = leader.getLocation().distanceSquared(p.getLocation());
-      if (distance > 50) {
-        double damage = Math.ceil((distance - 50) / GravitTestTask.getSettings().getFollowMeRadius());
-        p.damage(damage * GravitTestTask.getSettings().getFollowMeDamage());
-        p.sendMessage(GravitTestTask.getSettings().getMessage("damageradius"));
-        for (String effect : GravitTestTask.getSettings().getFollowMeeffectsList()) {
-          p.removePotionEffect(PotionEffectType.getByName(effect));
+        if (!follower.isOnline()) {
+          if (GravitTestTask.getSettings().isFollowMeEffects()) {
+            for (String effect : GravitTestTask.getSettings().getFollowMeEffectsList()) {
+              follower.removePotionEffect(PotionEffectType.getByName(effect));
+            }
+          }
+          playerListIterator.remove();
+          continue;
         }
-      } else {
-        count++;
-        int amplifier = (int) Math.floor(distance / GravitTestTask.getSettings().getFollowMeAmplifierRadius());
-        for (String effect : GravitTestTask.getSettings().getFollowMeeffectsList()) {
-          p.addPotionEffect(new PotionEffect(PotionEffectType.getByName(effect), 2 * 20, amplifier));
+
+        if (!follower.getWorld().getName().equalsIgnoreCase(leader.getWorld().getName())) {
+          follower.teleport(leader);
+          continue;
         }
+        double distance = leader.getLocation().distanceSquared(follower.getLocation());
+        if (distance > 50) {
+          double damage = Math.ceil((distance - 50) / GravitTestTask.getSettings().getFollowMeRadius());
+          follower.damage(damage * GravitTestTask.getSettings().getFollowMeDamage());
+          follower.sendMessage(GravitTestTask.getSettings().getMessage("damageradius"));
+          if (GravitTestTask.getSettings().isFollowMeEffects()) {
+            for (String effect : GravitTestTask.getSettings().getFollowMeEffectsList()) {
+              follower.removePotionEffect(PotionEffectType.getByName(effect));
+            }
+          }
+        } else {
+          if (GravitTestTask.getSettings().isFollowMeEffects()) {
+            count++;
+            int amplifier = (int) Math.floor(
+                distance / GravitTestTask.getSettings().getFollowMeAmplifierRadius());
+            for (String effect : GravitTestTask.getSettings().getFollowMeEffectsList()) {
+              follower.addPotionEffect(
+                  new PotionEffect(PotionEffectType.getByName(effect), 2 * 20, amplifier));
+            }
+          }
+        }
+    }
+    if (GravitTestTask.getSettings().isFollowMeEffects()) {
+      for (String effect : GravitTestTask.getSettings().getFollowMeEffectsList()) {
+        leader.addPotionEffect(
+            new PotionEffect(PotionEffectType.getByName(effect), 2 * 20, Math.min(count / 2, 3)));
       }
     }
-    for (String effect : GravitTestTask.getSettings().getFollowMeeffectsList()) {
-      leader.addPotionEffect(new PotionEffect(PotionEffectType.getByName(effect), 2 * 20, Math.min(count / 2, 3)));
     }
-  }
 }

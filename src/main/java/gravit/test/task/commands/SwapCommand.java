@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 /**
  * Воспользуюсь правом, что не было указано всё выносить в конфиг
  */
-public class swap implements CommandExecutor {
+public class SwapCommand implements CommandExecutor {
 
   @Override
   public boolean onCommand(CommandSender commandSender, Command command, String s,

@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class getmyhead implements CommandExecutor {
+public class GetMyHeadCommand implements CommandExecutor {
 
   @Override
   public boolean onCommand(CommandSender commandSender, Command command, String s,
@@ -25,11 +25,16 @@ public class getmyhead implements CommandExecutor {
     CooldownUtil.putCooldown(player.getName() + "_getmyhead", GravitTestTask.getSettings().getGetMyHeadCooldown() * 1000L);
     CommonUtil.giveHead(player);
     player.damage(GravitTestTask.getSettings().getGetMyHeadDamage());
-    for (String effect : GravitTestTask.getSettings().getGetMyHeadeffectsList()) {
-      String[] effectSplit = effect.split(":");
-      PotionEffectType potionEffectType = PotionEffectType.getByName(effectSplit[0]);
-      if (potionEffectType == null) continue;
-      player.addPotionEffect(new PotionEffect(potionEffectType, Integer.parseInt(effectSplit[1]) * 20, Integer.parseInt(effectSplit[2])));
+    if (GravitTestTask.getSettings().isGetMyHeadEffects()) {
+      for (String effect : GravitTestTask.getSettings().getGetMyHeadEffectsList()) {
+        String[] effectSplit = effect.split(":");
+        PotionEffectType potionEffectType = PotionEffectType.getByName(effectSplit[0]);
+        if (potionEffectType == null)
+          continue;
+        player.addPotionEffect(
+            new PotionEffect(potionEffectType, Integer.parseInt(effectSplit[1]) * 20,
+                Integer.parseInt(effectSplit[2])));
+      }
     }
     return false;
   }
