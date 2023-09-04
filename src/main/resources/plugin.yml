@@ -1,0 +1,16 @@
+name: GravitTestTask
+version: '${project.version}'
+main: gravit.test.task.GravitTestTask
+authors: [VladimirSauko]
+description: Тестовое задание от Gravit
+depend: [ProtocolLib]
+commands:
+  getmyhead:
+    permission: "getmyhead.use"
+    permission-message: "Недостаточно прав!"
+  followme:
+    permission: "followme.use"
+    permission-message: "Вы не наделены правом создавать последователей"
+  swap:
+    permission: "swap.use"
+    permission-message: "Недостаточно прав!"
