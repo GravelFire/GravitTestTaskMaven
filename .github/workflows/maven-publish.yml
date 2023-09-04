@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path:  |
-            ./target/GravitTestTaskMaven*.jar
+            ./target/GravitTestTask*.jar
       - name: get version and date
         run: |
           echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
@@ -41,6 +41,6 @@ jobs:
         with:
           tag_name: v${{ env.version }}_${{ env.date }}
           fail_on_unmatched_files: true
-          files: "./target/GravitTestTaskMaven*.jar"
+          files: "./target/GravitTestTask*.jar"
           draft: false
           prerelease: false
