@@ -30,7 +30,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: "GravitTestTaskMaven"
           path:  |
             ./target/GravitTestTaskMaven*.jar
       - name: get version and date
@@ -41,7 +40,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.version }}_${{ env.date }}
-          body: ${{ steps.changelog.outputs.changelog }}
           fail_on_unmatched_files: true
           files: "./target/GravitTestTaskMaven*.jar"
           draft: false
